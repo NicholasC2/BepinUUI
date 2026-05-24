@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <LangVersion>7.3</LangVersion>
+
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <Target Name="BundleSources" AfterTargets="Build">
+    <MakeDir Directories="dist" />
+    <Exec Command="python &quot;$(ProjectDir)bundle.py&quot;" WorkingDirectory="$(ProjectDir)" />
+  </Target>
+
+  <ItemGroup>
+    <Compile Remove="dist\**\*.cs" />
+    <None Remove="dist\**\*" />
+  </ItemGroup>
+
+  <!-- Bepin -->
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>libs\Bepin\BepInEx.dll</HintPath>
+    </Reference>
+
+    <Reference Include="0Harmony">
+      <HintPath>libs\Bepin\0Harmony.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Unity -->
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>libs\Unity\UnityEngine.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>libs\Unity\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
