@@ -10,29 +10,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Tests\**\*.cs" />
-    <None Include="Tests\**\*" />
+    <ProjectReference Include="..\..\BepinUUI.csproj" />
   </ItemGroup>
 
   <!-- Bepin -->
   <ItemGroup>
     <Reference Include="BepInEx">
-      <HintPath>libs\Bepin\BepInEx.dll</HintPath>
+      <HintPath>..\..\libs\Bepin\BepInEx.dll</HintPath>
     </Reference>
 
     <Reference Include="0Harmony">
-      <HintPath>libs\Bepin\0Harmony.dll</HintPath>
+      <HintPath>..\..\libs\Bepin\0Harmony.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <!-- Unity -->
   <ItemGroup>
     <Reference Include="UnityEngine">
-      <HintPath>libs\Unity\UnityEngine.dll</HintPath>
+      <HintPath>..\..\libs\Unity\UnityEngine.dll</HintPath>
     </Reference>
     
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>libs\Unity\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\libs\Unity\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -1,29 +1,12 @@
 using BepInEx;
 using UnityEngine;
 
-using BepInUUI.Core;
-
-namespace BepInUUI
+[BepInPlugin("bepinuui.core", "BepInUUI Core", "1.0.0")]
+public class UUIPlugin : BaseUnityPlugin
 {
-    [BepInPlugin("com.nick.bepin-universal-ui", "BepinUUI", "0.0.1")]
-    public class Plugin : BaseUnityPlugin
+    private void Awake()
     {
-        private bool _initialized;
-
-        private void Awake()
-        {
-            PlayerLoopInjector.Inject(Tick);
-        }
-
-        private void Tick()
-        {
-            if (!_initialized)
-            {
-                Render.Init();
-                _initialized = true;
-            }
-            
-            Render.Update();
-        }
+        var go = new GameObject("UUI Root");
+        go.AddComponent<BepInUUI.Core.UUIRoot>();
     }
 }

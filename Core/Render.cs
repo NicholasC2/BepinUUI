@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BepInUUI.Core
@@ -9,36 +10,50 @@ namespace BepInUUI.Core
 
         public static void Init()
         {
-            Shader shader = Shader.Find("Hidden/Internal-Colored");
+            if (_mat != null) return;
+
+            var shader = Shader.Find("Hidden/Internal-Colored");
+            if (shader == null)
+            {
+                Debug.LogError("UI shader not found!");
+                return;
+            }
             _mat = new Material(shader)
             {
                 hideFlags = HideFlags.HideAndDontSave
             };
 
             _mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            _mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
             _mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            _mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            _mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
             _mat.SetInt("_ZWrite", 0);
+            _mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            _mat.renderQueue = 4000;
         }
-
+ 
         public static void Update()
         {
             if (_mat == null)
                 Init();
 
             GL.PushMatrix();
-            _mat.SetPass(0);
+            try
+            {
+                _mat.SetPass(0);
+                GL.LoadPixelMatrix(0, Screen.width, Screen.height, 0);
 
-            GL.LoadPixelMatrix();
-
-            DrawWindows();
-
-            GL.PopMatrix();
+                DrawWindows();
+            }
+            finally
+            {
+                GL.PopMatrix();
+            }
         }
 
         private static void DrawWindows()
         {
-            foreach (var window in UWindowRegistry.Windows)
+            foreach (var window in UWindowRegistry.Windows.ToArray())
             {
                 DrawWindow(window);
             }
@@ -59,6 +74,7 @@ namespace BepInUUI.Core
         private static void DrawRect(float x, float y, float w, float h, Color color)
         {
             GL.Begin(GL.QUADS);
+
             GL.Color(color);
 
             GL.Vertex3(x, y, 0);
